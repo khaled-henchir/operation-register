@@ -1,0 +1,529 @@
+.app-header {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.app-title {
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+  font-size: 2rem;
+  letter-spacing: -0.025em;
+}
+
+.app-description {
+  color: var(--muted-foreground);
+  max-width: 600px;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Adjust the dashboard layout to fit in a single viewport */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0; /* Critical for nested flex containers */
+  max-height: calc(100vh - 150px); /* Limit height to prevent overflow, accounting for header */
+  overflow: hidden; /* Hide overflow at the dashboard level */
+}
+
+@media (min-width: 1024px) {
+  .dashboard {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* Adjust the form container to be more compact and scrollable */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Hide overflow at container level */
+  max-height: calc(100vh - 150px); /* Match dashboard max-height */
+}
+
+.form-title {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-title svg {
+  color: var(--primary);
+}
+
+.form-title h2 {
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 0.75rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Form validation styles */
+.form-error {
+  color: var(--error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.required-indicator {
+  color: var(--error);
+  margin-left: 2px;
+}
+
+.field-error {
+  border-color: var(--error) !important;
+  background-color: rgba(239, 68, 68, 0.05) !important;
+}
+
+.field-valid {
+  border-color: var(--success) !important;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.character-count {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Adjust the operation list container to enable scrolling */
+.operation-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Hide overflow at container level */
+  max-height: calc(100vh - 150px); /* Match dashboard max-height */
+}
+
+.operation-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Hide overflow at container level */
+}
+
+.operation-list-header {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.operation-list-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.operation-list-title svg {
+  color: var(--primary);
+}
+
+.operation-list-title h2 {
+  margin-bottom: 0;
+}
+
+/* Make the operation list scroll container take full available height */
+.operation-list-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.operation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Make operation cards more compact */
+.operation-item {
+  padding: 1rem;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.operation-item:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+
+.operation-title {
+  margin-bottom: 0.35rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.operation-address {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.35rem;
+}
+
+.operation-company {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.company-id {
+  font-weight: 500;
+  color: var(--foreground);
+  background-color: rgba(59, 130, 246, 0.1);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius);
+  font-family: monospace;
+}
+
+.operation-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.35rem;
+}
+
+.operation-meta svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.operation-lots {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.operation-lots-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.operation-lots-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  background-color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+}
+
+.operation-lots-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.lots-reserved,
+.lots-available {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lots-reserved {
+  color: var(--primary);
+}
+
+.lots-available {
+  color: var(--success);
+}
+
+.lots-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.reserved-indicator {
+  background-color: var(--primary);
+}
+
+.available-indicator {
+  background-color: var(--success);
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+  color: var(--muted-foreground);
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--muted);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced error component */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  margin-bottom: 0.75rem;
+  animation: slideIn 0.3s ease;
+}
+
+.error-icon {
+  flex-shrink: 0;
+  color: var(--error);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+}
+
+.empty-state svg {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  color: var(--muted-foreground);
+}
+
+.empty-state-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-description {
+  max-width: 300px;
+  font-size: 0.875rem;
+}
+
+/* Enhanced toast styles */
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast-leaving {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.toast-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.toast-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+}
+
+.toast-message {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: currentColor;
+  cursor: pointer;
+  padding: 0;
+  height: auto;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.toast-close:hover {
+  opacity: 1;
+  background: none;
+}
+
+/* Loading button styles */
+.loading-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner-small {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Offline indicator */
+.offline-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius);
+  color: var(--error);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Make the form scroll container take full available height */
+.form-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Replace the .scrollable class with a more specific implementation */
+.scrollable-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.5rem;
+}
+
+html,
+body {
+  overflow: auto; /* or overflow-y: scroll; */
+}
+
