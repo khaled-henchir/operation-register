@@ -52,17 +52,18 @@
 }
 
 .form-title {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  align-items:center;
 }
 
 .form-title svg {
   color: var(--primary);
 }
 
-.form-title h2 {
+.form-title h3 {
   margin-bottom: 0;
 }
 
@@ -482,8 +483,11 @@
   scrollbar-width: thin;
   scrollbar-color: var(--muted-foreground) var(--muted);
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-column-rule-width: 10px;
 }
-
+::-webkit-scrollbar {
+  width: 10px;
+}
 /* Animations */
 @keyframes fadeIn {
   from {

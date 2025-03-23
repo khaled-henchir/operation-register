@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=mysql://user:userpassword@db:3306/my_database
+    depends_on:
+      - db
+
+  frontend:
+    build: ./client  
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"

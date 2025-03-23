@@ -282,7 +282,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
           <path d="M12 5v14"></path>
           <path d="M5 12h14"></path>
         </svg>
-        <h2 id="form-heading">Créer une Nouvelle Opération</h2>
+        <h3 id="form-heading">Créer une Nouvelle Opération</h3>
       </div>
 
       {formErrors.general && <Error message={formErrors.general} />}

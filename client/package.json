@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
+    "gestion-des-operations-immobiliere": "file:..",
     "idb": "^8.0.2",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

@@ -18,9 +18,9 @@ export default defineConfig({
   },
   // Configure server options
   server: {
-    host: "127.0.0.1",
-    port: 5173,
-    open: true,
+    host: '0.0.0.0',
+
+    open: false,
     // Add CORS headers for development
     cors: true,
   },
