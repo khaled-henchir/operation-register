@@ -6,7 +6,7 @@
  *
  * @component
  */
-import type React from "react"
+import React from "react"
 
 const Loader: React.FC = () => (
   <div className="loader" role="status" aria-live="polite">

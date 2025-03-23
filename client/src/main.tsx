@@ -10,6 +10,7 @@ import { ServiceContext } from "./context/ServiceContext"
 import OperationService from "./services/OperationService"
 import App from "./App"
 import "./index.css"
+import React from "react"
 
 // Find the root element in the DOM
 const rootElement = document.getElementById("root")

@@ -1,5 +1,5 @@
 .app-header {
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -42,13 +42,13 @@
   }
 }
 
-/* Adjust the form container to be more compact and scrollable */
+
 .form-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; /* Hide overflow at container level */
-  max-height: calc(100vh - 150px); /* Match dashboard max-height */
+  overflow: hidden; 
+  max-height: calc(100vh - 150px); 
 }
 
 .form-title {
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  align-items:center;
+  align-items: center;
 }
 
 .form-title svg {
@@ -146,7 +146,7 @@
 }
 
 .operation-list-header {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,12 +184,12 @@
   margin: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 /* Make operation cards more compact */
 .operation-item {
-  padding: 1rem;
+  padding: 1.2rem;
   background-color: var(--background);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -199,6 +199,7 @@
   height: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
+  margin-top: 0.8rem;
 }
 
 .operation-item:hover {

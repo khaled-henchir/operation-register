@@ -1,5 +1,3 @@
-"use client"
-
 /**
  * Composant Principal de l'Application
  *
@@ -14,30 +12,13 @@ import OperationContainer from "./components/OperationContainer"
 import { useOperations } from "./hooks/useOperations"
 import OperationForm from "./components/OperationForm"
 import ToastContainer from "./components/ToastContainer"
-import SyncIndicator from "./components/SyncIndicator"
-import NetworkStatusIndicator from "./components/ui/NetworkStatusIndicator"
 import "./App.css"
 import type { Operation } from "./types"
+import React from "react"
 
 function App() {
-  // We're not using loading and error from useOperations here anymore
-  // as OperationContainer will handle that internally
   const { createOperation, fetchOperations } = useOperations()
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true)
-
-  // Monitor online status
-  useEffect(() => {
-    const handleOnline = () => {
-      // Refresh data when coming back online
-      fetchOperations()
-    }
-
-    window.addEventListener("online", handleOnline)
-
-    return () => {
-      window.removeEventListener("online", handleOnline)
-    }
-  }, [fetchOperations])
 
   // Set initial load flag
   useEffect(() => {
@@ -61,7 +42,6 @@ function App() {
       })
   }
 
-  // Update the container class to use full viewport height
   return (
     <div className="container full-height">
       <header className="app-header">
@@ -70,8 +50,6 @@ function App() {
           Gérez et suivez toutes vos opérations immobilières en un seul endroit. Créez de nouvelles opérations,
           consultez les opérations existantes et suivez leur état.
         </p>
-        <NetworkStatusIndicator />
-        <SyncIndicator />
       </header>
 
       <div className="dashboard">

@@ -1,11 +1,3 @@
-/**
- * Composant Toast
- *
- * Affiche des notifications temporaires à l'utilisateur (succès, erreur).
- * Les toasts disparaissent automatiquement après un délai défini.
- *
- * @component
- */
 import React from "react"
 import { type FC, useEffect, useState } from "react"
 

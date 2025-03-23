@@ -18,7 +18,7 @@ export default defineConfig({
   },
   // Configure server options
   server: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
 
     open: false,
     // Add CORS headers for development

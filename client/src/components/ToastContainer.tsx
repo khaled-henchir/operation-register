@@ -5,7 +5,7 @@
  * Centralise la logique de toast pour éviter la duplication dans les composants.
  */
 import React from "react"
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState, createContext, useContext } from "react"
 import Toast from "./Toast"
 
 interface ToastProps {
@@ -53,25 +53,6 @@ const ToastContainer: React.FC = () => {
   const hideToast = (id: number) => {
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
   }
-
-  // Listen for online/offline events to show appropriate toasts
-  useEffect(() => {
-    const handleOnline = () => {
-      showToast("Connexion rétablie.", "success")
-    }
-
-    const handleOffline = () => {
-      showToast("Vous êtes actuellement hors ligne. Certaines fonctionnalités peuvent être limitées.", "error")
-    }
-
-    window.addEventListener("online", handleOnline)
-    window.addEventListener("offline", handleOffline)
-
-    return () => {
-      window.removeEventListener("online", handleOnline)
-      window.removeEventListener("offline", handleOffline)
-    }
-  }, [])
 
   return (
     <ToastContext.Provider value={{ showToast, hideToast }}>

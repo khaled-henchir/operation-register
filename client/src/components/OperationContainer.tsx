@@ -29,7 +29,6 @@ const OperationContainer: React.FC = () => {
       {error && (
         <div className="operation-error-container">
           <Error message={error} />
-        
         </div>
       )}
 

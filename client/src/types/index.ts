@@ -16,7 +16,6 @@ export interface Operation {
   deliveryDate: string
   availableLots: number
   reservedLots?: number
-  isPending?: boolean // Indique si l'opération est en attente de synchronisation
 }
 
 /**
@@ -29,7 +28,6 @@ export interface OperationFormatted {
   date: string
   lots: string
   companyId: string
-  isPending?: boolean // Indique si l'opération est en attente de synchronisation
 }
 
 /**
@@ -72,28 +70,5 @@ export interface OperationListProps {
  */
 export interface ErrorProps {
   message: string
-}
-
-/**
- * Represents the status of a network request with retry
- */
-export interface RequestStatus {
-  isLoading: boolean
-  error: string | null
-  retryCount: number
-  lastRetryTime: number | null
-}
-
-/**
- * Represents the result of a synchronization operation
- */
-export interface SyncResult {
-  success: boolean
-  message: string
-  details?: {
-    successCount: number
-    errorCount: number
-    errors?: Array<{ id: string; error: string }>
-  }
 }
 

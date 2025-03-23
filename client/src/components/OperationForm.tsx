@@ -156,8 +156,8 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
         reservedLots: 0,
       }
 
-      const newOperation = await operationService.createOperation(operationToCreate)
-      onOperationCreated(newOperation)
+      const createdOperation = await operationService.createOperation(operationToCreate)
+      onOperationCreated(createdOperation)
 
       // Annoncer le succès pour les lecteurs d'écran
       setAnnouncementMessage(`Opération ${formData.commercialName} créée avec succès.`)
@@ -349,7 +349,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
               aria-describedby={`companyId-hint ${hasError("companyId") ? "companyId-error" : ""}`}
             />
             <span className="form-hint" id="companyId-hint">
-              L'identifiant de la société rattachée à l'opération 
+              L'identifiant de la société rattachée à l'opération
             </span>
             {hasError("companyId") && (
               <span className="form-error" id="companyId-error" role="alert">

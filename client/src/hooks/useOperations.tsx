@@ -27,11 +27,6 @@ export function useOperations() {
       setLoading(true)
       setError(null)
 
-      // Check if we're online
-      if (!navigator.onLine) {
-        throw new Error("Vous êtes hors ligne. Affichage des données en cache.")
-      }
-
       const response = await operationService.getOperations()
 
       // Accéder aux données des opérations en toute sécurité avec repli vers un tableau vide
@@ -45,46 +40,14 @@ export function useOperations() {
         date: op.deliveryDate,
         lots: `${op.reservedLots || 0}/${op.availableLots}`,
         companyId: op.companyId,
-        isPending: op.isPending,
       }))
 
       setData(formattedOperations)
       setLastUpdated(new Date())
-
-      // Store in localStorage for offline access
-      try {
-        localStorage.setItem("operations", JSON.stringify(formattedOperations))
-        localStorage.setItem("operationsLastUpdated", new Date().toISOString())
-      } catch (storageError) {
-        console.warn("Impossible de stocker les données en cache:", storageError)
-      }
     } catch (error) {
       console.error("Erreur lors de la récupération des opérations:", error)
 
-      // Try to get data from localStorage if we're offline
-      if (!navigator.onLine) {
-        try {
-          const cachedData = localStorage.getItem("operations")
-          const lastUpdatedStr = localStorage.getItem("operationsLastUpdated")
-
-          if (cachedData) {
-            const parsedData = JSON.parse(cachedData)
-            setData(parsedData)
-
-            if (lastUpdatedStr) {
-              setLastUpdated(new Date(lastUpdatedStr))
-            }
-
-            setError("Vous êtes hors ligne. Affichage des données en cache.")
-            setLoading(false)
-            return
-          }
-        } catch (storageError) {
-          console.warn("Impossible de récupérer les données en cache:", storageError)
-        }
-      }
-
-      // Si aucune donnée n'est disponible (ni en ligne ni en cache), utiliser les données de démonstration
+      // Si aucune donnée n'est disponible, utiliser les données de démonstration
       const formattedMockOperations = mockOperations.map((op) => ({
         id: op.id,
         title: op.commercialName,
@@ -92,7 +55,6 @@ export function useOperations() {
         date: op.deliveryDate,
         lots: `${op.reservedLots || 0}/${op.availableLots}`,
         companyId: op.companyId,
-        isPending: false,
       }))
 
       setData(formattedMockOperations)
@@ -107,18 +69,6 @@ export function useOperations() {
    */
   useEffect(() => {
     fetchOperations()
-
-    // Set up event listeners for online/offline status
-    const handleOnline = () => {
-      // Refresh data when coming back online
-      fetchOperations()
-    }
-
-    window.addEventListener("online", handleOnline)
-
-    return () => {
-      window.removeEventListener("online", handleOnline)
-    }
   }, [fetchOperations])
 
   /**
@@ -130,11 +80,6 @@ export function useOperations() {
     newOperationData: OperationFormData & { reservedLots?: number },
   ): Promise<Operation> => {
     try {
-      // Check if we're online
-      if (!navigator.onLine) {
-        throw new Error("Impossible de créer une opération en mode hors ligne")
-      }
-
       // S'assurer que reservedLots est défini à 0
       const operationToCreate = {
         ...newOperationData,

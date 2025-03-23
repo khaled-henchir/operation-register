@@ -3,13 +3,11 @@
  *
  * Classe de service pour gérer les opérations API liées aux données d'opérations.
  * Fournit des méthodes pour récupérer et créer des opérations.
- * Intègre la gestion hors ligne et les stratégies de retry.
  *
  * @class
  */
 import type { Operation, OperationFormData } from "../types"
 import { fetchMockOperations, createMockOperation } from "../mock/mockOperations"
-import OfflineService from "./OfflineService"
 import ValidationService from "./ValidationService"
 
 class OperationService {
@@ -21,55 +19,7 @@ class OperationService {
   /**
    * Indicateur pour déterminer si nous devons utiliser des données fictives (pour le développement)
    */
-  static useMockData = false // Set to false to use real API
-
-  /**
-   * Nombre maximum de tentatives pour les requêtes réseau
-   */
-  static maxRetries = 3
-
-  /**
-   * Délai de base pour le backoff exponentiel (en ms)
-   */
-  static baseRetryDelay = 1000
-
-  /**
-   * Effectue une requête avec retry et backoff exponentiel
-   * @param {Function} requestFn - Fonction effectuant la requête
-   * @param {number} retries - Nombre de tentatives restantes
-   * @returns {Promise<any>} Résultat de la requête
-   * @throws {Error} Si toutes les tentatives échouent
-   */
-  static async fetchWithRetry(requestFn: () => Promise<any>, retries = this.maxRetries): Promise<any> {
-    try {
-      return await requestFn()
-    } catch (error) {
-      // Ne pas retenter si nous sommes hors ligne
-      if (!navigator.onLine) {
-        throw new Error("Vous êtes hors ligne. Veuillez vous reconnecter et réessayer.")
-      }
-
-      // Ne pas retenter s'il n'y a plus de tentatives ou si l'erreur est une erreur de validation
-      if (
-        retries <= 0 ||
-        (error instanceof Error &&
-          (error.message.includes("n'existe pas") ||
-            error.message.includes("existe déjà") ||
-            error.message.includes("ne doit pas dépasser")))
-      ) {
-        throw error
-      }
-
-      // Calculer le délai avec backoff exponentiel et jitter
-      const delay = this.baseRetryDelay * Math.pow(2, this.maxRetries - retries) * (0.5 + Math.random() * 0.5)
-
-      console.log(`Tentative échouée. Nouvelle tentative dans ${Math.round(delay)}ms...`)
-      await new Promise((resolve) => setTimeout(resolve, delay))
-
-      // Retenter la requête
-      return this.fetchWithRetry(requestFn, retries - 1)
-    }
-  }
+  static useMockData = true // Set to false to use real API
 
   /**
    * Récupère toutes les opérations depuis l'API
@@ -83,51 +33,16 @@ class OperationService {
     }
 
     try {
-      // Vérifier si nous sommes en ligne
-      if (!navigator.onLine) {
-        console.log("Mode hors ligne détecté, utilisation des données en cache")
-        const cachedOperations = await OfflineService.getCachedOperations()
+      const response = await fetch(`${this.apiUrl}/operations`)
 
-        if (cachedOperations.length > 0) {
-          return { data: cachedOperations }
-        }
-
-        throw new Error("Vous êtes hors ligne et aucune donnée n'est disponible en cache.")
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData?.error || `Échec de la requête: ${response.status} ${response.statusText}`)
       }
 
-      // Effectuer la requête avec retry
-      const response = await this.fetchWithRetry(() =>
-        fetch(`${this.apiUrl}/operations`).then((response) => {
-          if (!response.ok) {
-            return response.json().then((errorData) => {
-              throw new Error(errorData?.error || `Échec de la requête: ${response.status} ${response.statusText}`)
-            })
-          }
-          return response.json()
-        }),
-      )
-
-      // Mettre en cache les opérations pour un accès hors ligne
-      if (response.data) {
-        await OfflineService.cacheOperations(response.data)
-      }
-
-      return response
+      return await response.json()
     } catch (error) {
       console.error("Erreur dans getOperations:", error)
-
-      // Essayer de récupérer les données en cache même si nous sommes en ligne
-      // mais que la requête a échoué
-      try {
-        const cachedOperations = await OfflineService.getCachedOperations()
-
-        if (cachedOperations.length > 0) {
-          return { data: cachedOperations }
-        }
-      } catch (cacheError) {
-        console.warn("Impossible de récupérer les données en cache:", cacheError)
-      }
-
       throw error instanceof Error ? error : new Error("Échec de la connexion au réseau")
     }
   }
@@ -142,19 +57,11 @@ class OperationService {
     let existingOperations: Array<{ commercialName: string; deliveryDate: string }> = []
 
     try {
-      if (navigator.onLine) {
-        const response = await this.getOperations()
-        existingOperations = response.data.map((op) => ({
-          commercialName: op.commercialName,
-          deliveryDate: op.deliveryDate,
-        }))
-      } else {
-        const cachedOperations = await OfflineService.getCachedOperations()
-        existingOperations = cachedOperations.map((op) => ({
-          commercialName: op.commercialName,
-          deliveryDate: op.deliveryDate,
-        }))
-      }
+      const response = await this.getOperations()
+      existingOperations = response.data.map((op) => ({
+        commercialName: op.commercialName,
+        deliveryDate: op.deliveryDate,
+      }))
     } catch (error) {
       console.warn("Impossible de récupérer les opérations existantes pour la validation:", error)
     }
@@ -184,26 +91,6 @@ class OperationService {
       return createMockOperation(operationData)
     }
 
-    // Vérifier si nous sommes hors ligne
-    if (!navigator.onLine) {
-      console.log("Mode hors ligne détecté, mise en file d'attente de l'opération")
-
-      // Stocker l'opération pour synchronisation ultérieure
-      const pendingId = await OfflineService.queueOperationForSync(operationData)
-
-      // Créer une opération temporaire avec un ID local
-      return {
-        id: pendingId,
-        commercialName: operationData.commercialName,
-        companyId: operationData.companyId,
-        address: operationData.address,
-        deliveryDate: operationData.deliveryDate,
-        availableLots: operationData.availableLots,
-        reservedLots: operationData.reservedLots || 0,
-        isPending: true, // Marquer comme en attente
-      }
-    }
-
     try {
       // Préparer l'objet pour l'API
       const requestData = {
@@ -215,23 +102,19 @@ class OperationService {
         reservedLots: operationData.reservedLots || 0,
       }
 
-      // Effectuer la requête avec retry
-      const response = await this.fetchWithRetry(() =>
-        fetch(`${this.apiUrl}/operations`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestData),
-        }).then((response) => {
-          if (!response.ok) {
-            return response.json().then((errorData) => {
-              throw new Error(errorData?.error || `Échec de la création: ${response.status} ${response.statusText}`)
-            })
-          }
-          return response.json()
-        }),
-      )
+      const response = await fetch(`${this.apiUrl}/operations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      })
 
-      return response.data || response
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData?.error || `Échec de la création: ${response.status} ${response.statusText}`)
+      }
+
+      const result = await response.json()
+      return result.data || result
     } catch (error) {
       console.error("Erreur dans createOperation:", error)
       throw error instanceof Error ? error : new Error("Échec de la création de l'opération")

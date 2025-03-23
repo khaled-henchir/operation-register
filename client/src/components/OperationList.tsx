@@ -3,7 +3,6 @@
  *
  * Affiche une liste d'opérations dans une mise en page basée sur des cartes.
  * Gère l'affichage de l'état vide lorsqu'aucune opération n'est disponible.
- * Affiche également les indicateurs pour les opérations en attente de synchronisation.
  *
  * @component
  * @param {OperationListProps} props - Props du composant contenant le tableau d'opérations
@@ -11,6 +10,7 @@
 import type { FC } from "react"
 import type { OperationListProps } from "../types"
 import { formatDate } from "../utils/dateUtils"
+import React from "react"
 
 const OperationList: FC<OperationListProps> = ({ operations }) => {
   // Afficher l'état vide lorsqu'aucune opération n'est disponible
@@ -66,27 +66,22 @@ const OperationList: FC<OperationListProps> = ({ operations }) => {
             <path d="M8 11h.01"></path>
             <path d="M8 16h.01"></path>
           </svg>
-          <h2>Opérations ({operations.length})</h2>
+          <h2>Liste des opérations ({operations.length})</h2>
         </div>
       </div>
       <div className="operation-list-scroll-container">
         <ul className="operation-list" aria-label="Liste des opérations">
           {operations.map((op) => {
-            // Parse the lots string to get available and reserved lots
             const lotsMatch = op.lots.match(/(\d+)\/(\d+)/)
             const reservedLots = lotsMatch ? Number.parseInt(lotsMatch[1]) : 0
             const totalLots = lotsMatch ? Number.parseInt(lotsMatch[2]) : 0
             const availableLots = totalLots - reservedLots
             const availablePercentage = totalLots > 0 ? (reservedLots / totalLots) * 100 : 0
 
-            // Determine status based on reserved lots and pending status
             let statusClass = "status-new"
             let statusText = "Nouveau"
 
-            if (op.isPending) {
-              statusClass = "status-pending"
-              statusText = "En attente"
-            } else if (reservedLots === totalLots && totalLots > 0) {
+            if (reservedLots === totalLots && totalLots > 0) {
               statusClass = "status-complete"
               statusText = "Complet"
             } else if (reservedLots > 0) {
@@ -95,7 +90,7 @@ const OperationList: FC<OperationListProps> = ({ operations }) => {
             }
 
             return (
-              <li key={op.id} className={`operation-item ${op.isPending ? "operation-pending" : ""}`}>
+              <li key={op.id} className="operation-item">
                 <div className={`operation-status ${statusClass}`}>{statusText}</div>
                 <h3 className="operation-title">{op.title}</h3>
 
@@ -161,29 +156,6 @@ const OperationList: FC<OperationListProps> = ({ operations }) => {
                     </div>
                   </div>
                 </div>
-
-                {op.isPending && (
-                  <div className="pending-badge" aria-label="En attente de synchronisation">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M21 2v6h-6"></path>
-                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-                      <path d="M3 22v-6h6"></path>
-                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
-                    </svg>
-                    <span>En attente de synchronisation</span>
-                  </div>
-                )}
 
                 <div className="operation-lots">
                   <div className="operation-lots-header">
