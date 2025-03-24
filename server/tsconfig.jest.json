@@ -1,9 +1,18 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "module": "commonjs",  
-      "moduleResolution": "node"  
-    },
-    "include": ["src/**/*.ts", "tests/**/*.ts"]
-  }
-  
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "types": ["jest", "node"],
+    "outDir": "./dist-test",  // Separate output for tests
+    "noEmit": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "global.d.ts"  
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+  ]
+}

@@ -7,7 +7,9 @@
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "seed": "ts-node prisma/seed.ts",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +38,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "gestion-des-operations-immobiliere": "file:..",
+    "jest-mock-extended": "^4.0.0-beta1",
     "playwright": "^1.51.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",

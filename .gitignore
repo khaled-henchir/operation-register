@@ -82,3 +82,5 @@ tmp/
 .hg/
 .svn/
 
+.gitkeep
+

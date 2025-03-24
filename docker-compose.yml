@@ -1,20 +1,4 @@
 services:
-  backend:
-    build: ./server
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=mysql://user:userpassword@db:3306/my_database
-    depends_on:
-      - db
-
-  frontend:
-    build: ./client  
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-
   db:
     image: mysql:latest
     restart: always
@@ -25,3 +9,23 @@ services:
       MYSQL_PASSWORD: userpassword
     ports:
       - "3306:3306"
+
+  backend:
+    build: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://user:userpassword@db:3306/my_database
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate dev --name init && npm run seed && npm start"
+
+
+  frontend:
+    build: ./client  
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
