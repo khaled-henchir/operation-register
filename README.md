@@ -41,7 +41,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 1. Clonez le repository sur votre machine locale :
 
 ```bash
-   git clone https://github.com/khaled-henchir/operation-register
+git clone https://github.com/khaled-henchir/operation-register
 ```
 
 #### Au niveau de répertoire 'server'  : 
@@ -49,7 +49,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 1. Installez les dépendances :
 
 ```bash
-   npm install
+npm install
 ```
 
 2. Ajoutez l'url de base do donnée à votre environnement de variabel ( vous devez créer .env file ) :
@@ -58,43 +58,40 @@ Le système adopte une architecture propre avec une séparation claire entre la 
    J'ai utilisé Mysql alors l'url et sous cette forme : 
 
 ```bash .env 
-   DATABASE_URL = mysql://username:password@host:port/database
+DATABASE_URL = mysql://username:password@host:port/database
  ```
 
 3. Démarrer la base de données :
 
 Assurez-vous que votre service base de données est en cours d'exécution.
 
-4. Appliquer les migrations et créer le schéma avec :
+4. Appliquer les migrations, créer le schéma et Générer le client Prisma :
    
-Cette commande va à la fois créer la base de données (si elle n'existe pas déjà) et appliquer les migrations pour créer les tables nécessaires.
-Une fois la migration réussie, votre base de données sera configurée avec les tables définies dans votre schéma Prisma (server/prisma/schema.prisma).
+Cette commande va à la fois : 
 
-```bash
-   npx prisma migrate dev --name init
-```   
-
-5. Générer le client Prisma :
+ * Créer la base de données si elle n'existe pas.
+ * Appliquer les migrations à votre base de données.
+ * Générer automatiquement le Prisma Client.
 
 ```bash 
-npx prisma generate
-```   
+npx prisma migrate dev --name init
+```
 
 6. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
 
 ```bash
-   npm run seed
+npm run seed
 ```
    Les exemples sont créé avec le fichier server/prisma/seed.ts   
 
 7. Construire et éxecuter le serveur avec :
 
 ```bash
-   npm run build
+npm run build
 ```
 
 ```bash
-   npm run start	
+npm run start	
 ```   
 
 #### Au niveau de répertoire 'client' : 
@@ -103,17 +100,17 @@ npx prisma generate
 1. Installez les dépendances :
 
 ```bash
-   npm install
+npm install
 ```
 
 6. Construire et éxecuter le client avec :
 
 ```bash
-   npm run build
+npm run build
 ```
 
 ```bash
-   npm run start	
+npm run start	
 ```   
 
 #### Avec Docker : 
@@ -123,7 +120,7 @@ Vous devez uninstaller le fichier .env (s'il existe) pour que le conteneur docke
 pointe vers la bonner URL de base donnée.
 
 ```bash
-   docker-compose up --build
+docker-compose up --build
 ```
 
 
