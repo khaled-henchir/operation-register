@@ -8,7 +8,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 ## Overview
 
-![Alt Text]([https://example.com/path-to-image.jpg](https://imgur.com/a/96NnZSW))
+![Alt Text](./Dashboard-dark)
 
 ## Technologies Utilisées
 
