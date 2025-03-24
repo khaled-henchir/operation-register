@@ -71,9 +71,7 @@ Une fois la migration réussie, votre base de données sera configurée avec les
 
 4. Générer le client Prisma :
 
-```cmd
-   npx prisma generate
-```   
+```npx prisma generate```   
 
 5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
 
