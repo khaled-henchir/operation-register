@@ -6,10 +6,6 @@ Ce projet implémente un système de gestion des opérations immobilières. Le s
 
 Le système adopte une architecture propre avec une séparation claire entre la logique métier, les services applicatifs et l'infrastructure. Il est conçu avec des technologies modernes, en mettant l'accent sur la bonne fonctionnement avec un design réactif.
 
-## Overview
-
-![Alt Text](./Dashboard-dark)
-
 ## Technologies Utilisées
 
 ### Backend
