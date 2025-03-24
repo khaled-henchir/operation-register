@@ -81,11 +81,12 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 ```
    Les exemples sont créé avec le fichier server/prisma/seed.ts   
 
-6. Construire et éxecuter le server avec :
+6. Construire et éxecuter le serveur avec :
 
 ```bash
    npm run build
 ```
+
 ```bash
    npm run start	
 ```   
@@ -104,6 +105,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 ```bash
    npm run build
 ```
+
 ```bash
    npm run start	
 ```   
