@@ -123,10 +123,14 @@ http://localhost:<port>/api-docs
 
 ## Tests
 
-Les tests unitaires et d'intégration sont réalisés avec Jest. Pour exécuter les tests dans le répertoire du serveur, utilisez la commande suivante :
+Les tests unitaires sont réalisés avec Jest. Pour exécuter les tests dans le répertoire du serveur, utilisez la commande suivante :
 
 ```
 npm run test
+```
+Test coverage avec :
+```
+npm run test:coverage
 ```
 
 
