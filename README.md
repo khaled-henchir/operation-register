@@ -113,17 +113,6 @@ npm run build
 npm run start	
 ```   
 
-#### Avec Docker : 
-
-1. Executez ce command ( vous devez avoir docker installé ) :
-Vous devez uninstaller le fichier .env (s'il existe) pour que le conteneur docker de backend
-pointe vers la bonner URL de base donnée.
-
-```bash
-docker-compose up --build
-```
-
-
 ## Documentation de l'API
 
 Une fois le serveur lancé, la documentation de l'API est disponible via Swagger à l'adresse suivante (adaptée selon votre configuration) :
