@@ -49,11 +49,10 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 1. Ajoutez l'url de base do donnée à votre environnement de variabel ( vous devez créer .env file ) :
    
+   Ici vous devez utiliser un base de bonnée compatible avec Prisma ORM ( PostgreSQL, MySQL, MongoDB, Sqlite... ) 
+   J'ai utilisé Mysql alors l'url et sous cette forme : 
 
-```bash
-   #.env 
-   # Ici vous devez utiliser un base de bonnée compatible avec Prisma ORM ( PostgreSQL, MySQL, MongoDB, Sqlite... ) 
-   # J'ai utilisé Mysql alors l'url et sous cette forme : 
+```bash .env 
    DATABASE_URL = mysql://username:password@host:port/database
  ```
 
@@ -67,8 +66,8 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 ```bash
    npx prisma migrate dev --name
-# name est le nom de migration 
 ```   
+   name est le nom de migration 
 
 4. Générer le client Prisma :
 
@@ -79,9 +78,10 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
 
 ```bash
-   # Les samples sont créé avec le fichier server/prisma/seed.ts
+   # 
    npm run seed
-```   
+```
+   Les exemples sont créé avec le fichier server/prisma/seed.ts   
 
 6. Construire et éxecuter le server avec :
 
