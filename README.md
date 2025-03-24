@@ -66,7 +66,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 ```bash
    npx prisma migrate dev --name
 ```   
-   name est le nom de migration 
+   "name" est le nom de migration 
 
 4. Générer le client Prisma :
 
