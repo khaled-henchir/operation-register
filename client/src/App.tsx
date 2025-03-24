@@ -34,7 +34,6 @@ function App() {
   const handleOperationCreated = (newOperation: Operation) => {
     createOperation(newOperation)
       .then(() => {
-        // Refresh the operations list
         fetchOperations()
       })
       .catch((err: Error) => {

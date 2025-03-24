@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom"
-import { jest } from "@jest/globals"
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -22,36 +21,40 @@ Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 })
 
-// Mock IndexedDB
-const indexedDB = {
-  open: jest.fn().mockReturnValue({
-    onupgradeneeded: null,
-    onsuccess: null,
-    onerror: null,
-    result: {
-      transaction: jest.fn().mockReturnValue({
-        objectStore: jest.fn().mockReturnValue({
-          put: jest.fn(),
-          add: jest.fn(),
-          get: jest.fn(),
-          getAll: jest.fn(),
-          delete: jest.fn(),
-          clear: jest.fn(),
-          count: jest.fn(),
-        }),
-      }),
-      createObjectStore: jest.fn(),
-    },
-  }),
-}
-
-Object.defineProperty(window, "indexedDB", {
-  value: indexedDB,
-})
-
 // Mock navigator.onLine
 Object.defineProperty(navigator, "onLine", {
   writable: true,
   value: true,
+})
+
+// Mock console methods to reduce test noise
+const originalConsoleError = console.error
+const originalConsoleWarn = console.warn
+const originalConsoleLog = console.log
+
+// Suppress console output during tests unless explicitly needed
+console.error = (...args: any[]) => {
+  if (process.env.DEBUG) {
+    originalConsoleError(...args)
+  }
+}
+
+console.warn = (...args: any[]) => {
+  if (process.env.DEBUG) {
+    originalConsoleWarn(...args)
+  }
+}
+
+console.log = (...args: any[]) => {
+  if (process.env.DEBUG) {
+    originalConsoleLog(...args)
+  }
+}
+
+// Restore console methods after tests
+afterAll(() => {
+  console.error = originalConsoleError
+  console.warn = originalConsoleWarn
+  console.log = originalConsoleLog
 })
 
