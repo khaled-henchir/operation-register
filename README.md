@@ -77,7 +77,6 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
 
 ```bash
-   # 
    npm run seed
 ```
    Les exemples sont créé avec le fichier server/prisma/seed.ts   
@@ -86,6 +85,8 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 ```bash
    npm run build
+```
+```bash
    npm run start	
 ```   
 
@@ -102,6 +103,8 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 ```bash
    npm run build
+```
+```bash
    npm run start	
 ```   
 
