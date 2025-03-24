@@ -21,7 +21,6 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 - TypeScript
 - CSS3
 - Vite (bundler)
-- Jest 
 
 ### Architecture
 - Architecture propre
@@ -117,7 +116,7 @@ pointe vers la bonner URL de base donnée.
 ```
 
 
-### Documentation de l'API
+## Documentation de l'API
 
 Une fois le serveur lancé, la documentation de l'API est disponible via Swagger à l'adresse suivante (adaptée selon votre configuration) :
 
@@ -125,7 +124,7 @@ Une fois le serveur lancé, la documentation de l'API est disponible via Swagger
 http://localhost:<port>/api-docs
 ```
 
-### Tests
+## Tests
 
 Les tests unitaires et d'intégration sont réalisés avec Jest. Pour exécuter les tests dans le répertoire du serveur, utilisez la commande suivante :
 
