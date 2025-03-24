@@ -38,7 +38,7 @@ export function setupOperationRoutes(operationController: OperationController): 
    *                 companyId: "comp-001"
    *                 deliveryDate: "2025-06-15"
    *                 address: "123 Avenue des Fleurs, 75001 Paris"
-   *                 totalLots: 24
+   *                 availableLots: 24
    *     responses:
    *       201:
    *         description: Opération créée avec succès

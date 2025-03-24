@@ -17,8 +17,8 @@ export const setupSwagger = (app: Express): void => {
         description:
           "API pour la gestion des opérations immobilières, permettant la création et la consultation des opérations.",
         contact: {
-          name: "Équipe de Développement",
-          email: "dev@example.com",
+          name: "Développeur",
+          email: "khaled.henchir@enciar.ucar.tn",
         },
         license: {
           name: "MIT",
