@@ -1,5 +1,3 @@
-"use client"
-
 /**
  * Composant Conteneur de Toast
  *
@@ -59,8 +57,10 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ initialToast }) => {
    * Masque un toast spécifique
    * @param {number} id - L'identifiant du toast à masquer
    */
-  const hideToast = (id: number) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+  const hideToast = (id?: number) => {
+    if (id) {
+      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+    }
   }
 
   return (

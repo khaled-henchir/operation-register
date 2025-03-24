@@ -1,6 +1,10 @@
-"use client"
-import React from "react"
-import { type FC, useEffect, useState } from "react"
+/**
+ * @description Composant React pour afficher des notifications toast temporaires.
+ * @component
+ * 
+ */
+
+import React, { type FC, useEffect, useState } from "react"
 
 interface ToastProps {
   message: string
@@ -25,7 +29,9 @@ const Toast: FC<ToastProps> = ({ message, type, onClose }) => {
     setIsLeaving(true)
     setTimeout(() => {
       setIsVisible(false)
-      onClose()
+      if (onClose) {
+        onClose()
+      }
     }, 300)
   }
 
@@ -98,4 +104,3 @@ const Toast: FC<ToastProps> = ({ message, type, onClose }) => {
 }
 
 export default Toast
-

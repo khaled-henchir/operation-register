@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 
 async function main() {
   const companies = [
-    CompanyFactory.create({ id: "1111", name: 'Societe A' }),
-    CompanyFactory.create({ id: "2222", name: 'Societe B' }),
-    CompanyFactory.create({ id: "3333", name: 'Societe C' }),
+    CompanyFactory.create({ id: "SocieteA", name: 'Societe A' }),
+    CompanyFactory.create({ id: "SocieteB", name: 'Societe B' }),
+    CompanyFactory.create({ id: "SocieteC", name: 'Societe C' }),
   ];
 
   for (const company of companies) {
@@ -34,21 +34,21 @@ async function main() {
   const operations = [
     OperationFactory.create({
       commercialName: 'Opération A',
-      companyId: "1111", // Linking to Societe A
+      companyId: "SocieteA", // Linking to Societe A
       deliveryDate: new Date(),
       address: '123 Rue A',
       availableLots: 5,
     }),
     OperationFactory.create({
       commercialName: 'Opération B',
-      companyId: "2222", // Linking to Societe B
+      companyId: "SocieteB", // Linking to Societe B
       deliveryDate: new Date(),
       address: '456 Rue B',
       availableLots: 10,
     }),
     OperationFactory.create({
       commercialName: 'Opération C',
-      companyId: "3333", // Linking to Societe C
+      companyId: "SocieteA", // Linking to Societe A ( Two operations can be linked with one company )
       deliveryDate: new Date(),
       address: '789 Rue C',
       availableLots: 7,

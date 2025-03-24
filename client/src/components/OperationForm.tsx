@@ -101,6 +101,12 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
         return ValidationService.validateCommercialName(formData.commercialName)
       case "companyId":
         return ValidationService.validateCompanyId(formData.companyId)
+      case "adress":
+        return ValidationService.validateAddress(formData.address)
+      case "deliveryDate":
+        return ValidationService.validateCompanyId(formData.deliveryDate)
+      case "availbaleLots":
+        return ValidationService.validateAvailableLots(formData.availableLots)
       default:
         return undefined
     }
@@ -250,10 +256,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
 
   return (
     <>
-      <div className="sr-only" aria-live="assertive" role="status">
-        {announcementMessage}
-      </div>
-
       <div className="form-title">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +293,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
                 value={formData.commercialName}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                maxLength={24}
+                //maxLength={24} ( if we want to not let the user type more than 24 characters )
                 required
                 aria-required="true"
                 className={getFieldClass("commercialName")}
@@ -365,7 +367,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
               aria-describedby={`address-hint ${hasError("address") ? "address-error" : ""}`}
             />
             <span className="form-hint" id="address-hint">
-              Emplacement physique de l'opération
+              Emplacement de l'opération
             </span>
             {hasError("address") && (
               <span className="form-error" id="address-error" role="alert">
@@ -392,7 +394,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
               className={getFieldClass("deliveryDate")}
               aria-invalid={hasError("deliveryDate")}
               aria-describedby={`deliveryDate-hint ${hasError("deliveryDate") ? "deliveryDate-error" : ""}`}
-              min={new Date().toISOString().split("T")[0]} // Set min date to today
+              //min={new Date().toISOString().split("T")[0]} // if we want to make past dates not clickable
             />
             <span className="form-hint" id="deliveryDate-hint">
               Date prévue de livraison
@@ -427,7 +429,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
               aria-describedby={`availableLots-hint ${hasError("availableLots") ? "availableLots-error" : ""}`}
             />
             <span className="form-hint" id="availableLots-hint">
-              Nombre total de lots disponibles (doit être supérieur à 0)
+              Nombre total de lots disponibles 
             </span>
             {hasError("availableLots") && (
               <span className="form-error" id="availableLots-error" role="alert">

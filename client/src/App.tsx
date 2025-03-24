@@ -7,7 +7,7 @@
  *
  * @component
  */
-import { useState, React } from "react"
+import React, { useState } from "react"
 import OperationContainer from "./components/OperationContainer"
 import { useOperations } from "./hooks/useOperations"
 import OperationForm from "./components/OperationForm"
@@ -34,10 +34,6 @@ function App() {
       })
       .catch((err: Error) => {
         console.error("Error creating operation:", err)
-        setToastMessage({
-          message: `Erreur: ${err.message}`,
-          type: "error",
-        })
       })
   }
 
@@ -45,7 +41,7 @@ function App() {
     <ToastContext.Provider
       value={{
         showToast: (message, type) => setToastMessage({ message, type }),
-        hideToast: () => {},
+        hideToast: () => setToastMessage(null),
       }}
     >
       <div className="container full-height">

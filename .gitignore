@@ -82,5 +82,5 @@ tmp/
 .hg/
 .svn/
 
-.gitkeep
+.gitkeep.txt
 

@@ -31,9 +31,9 @@
   grid-template-columns: 1fr;
   gap: 1rem;
   flex: 1;
-  min-height: 0; /* Critical for nested flex containers */
-  max-height: calc(100vh - 150px); /* Limit height to prevent overflow, accounting for header */
-  overflow: hidden; /* Hide overflow at the dashboard level */
+  min-height: 0; 
+  max-height: calc(100vh - 150px); 
+  overflow: hidden; 
 }
 
 @media (min-width: 1024px) {
@@ -87,7 +87,7 @@
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 1rem;
 }
 
@@ -138,7 +138,7 @@
   margin-right: -0.5rem;
   scrollbar-width: thin;
   scrollbar-color: var(--muted-foreground) var(--muted);
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch; 
 }
 
 /* Operation list styles */
@@ -146,15 +146,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; /* Hide overflow at container level */
-  max-height: calc(100vh - 150px); /* Match dashboard max-height */
+  overflow: hidden; 
+  max-height: calc(100vh - 150px);
 }
 
 .operation-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; /* Hide overflow at container level */
+  overflow: hidden; 
 }
 
 .operation-list-header {
@@ -187,7 +187,7 @@
   margin-right: -0.5rem;
   scrollbar-width: thin;
   scrollbar-color: var(--muted-foreground) var(--muted);
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch; 
 }
 
 .operation-list {
@@ -378,7 +378,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
   font-size: 0.875rem;
   background-color: var(--secondary);
   color: var(--foreground);
@@ -403,8 +403,6 @@
 .operation-header-actions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0rem;
 }
 
 .last-updated {
@@ -516,7 +514,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  z-index: 9999; /* Ensure toasts are always on top */
+  z-index: 9999; 
   max-width: 400px;
 }
 
@@ -660,6 +658,39 @@
 
 html,
 body {
-  overflow: auto; /* or overflow-y: scroll; */
+  overflow: auto; 
 }
 
+.operation-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.operation-list-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.operation-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4f46e5;
+}
+
+.refresh-button:hover {
+  text-decoration: underline;
+}

@@ -41,15 +41,6 @@ export interface OperationFormData {
   availableLots: number
 }
 
-/**
- * Represents the service context type for dependency injection
- */
-export interface ServiceContextType {
-  operationService: {
-    getOperations: () => Promise<{ data: Operation[] }>
-    createOperation: (operationData: OperationFormData & { reservedLots?: number }) => Promise<Operation>
-  }
-}
 
 /**
  * Props for the OperationForm component

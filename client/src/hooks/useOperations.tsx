@@ -28,8 +28,6 @@ export function useOperations() {
       setError(null)
 
       const response = await operationService.getOperations()
-
-      // Accéder aux données des opérations en toute sécurité avec repli vers un tableau vide
       const operations = response?.data || []
 
       // Transformer les données de l'API au format nécessaire pour l'UI
@@ -60,8 +58,7 @@ export function useOperations() {
       setData(formattedMockOperations)
       setError("Impossible de charger les données depuis l'API. Affichage des données de démonstration.")
 
-      // We don't show a toast here because the error will be displayed in the UI
-      // by the OperationContainer component
+
     } finally {
       setLoading(false)
     }
@@ -83,7 +80,7 @@ export function useOperations() {
     newOperationData: OperationFormData & { reservedLots?: number },
   ): Promise<Operation> => {
     try {
-      // S'assurer que reservedLots est défini à 0
+
       const operationToCreate = {
         ...newOperationData,
         reservedLots: newOperationData.reservedLots || 0,
@@ -91,13 +88,12 @@ export function useOperations() {
 
       const createdOperation = await operationService.createOperation(operationToCreate)
 
-      // Refresh the operations list
       fetchOperations()
 
       return createdOperation
     } catch (error) {
       console.error("Erreur lors de la création de l'opération:", error)
-      throw error // Re-throw to allow the calling component to handle it
+      throw error 
     }
   }
 

@@ -12,11 +12,9 @@ import App from "./App"
 import "./index.css"
 import React from "react"
 
-// Find the root element in the DOM
 const rootElement = document.getElementById("root")
 
 if (rootElement) {
-  // Create a React root and render the application
   createRoot(rootElement).render(
     <StrictMode>
       <ServiceContext.Provider value={{ operationService: OperationService }}>
