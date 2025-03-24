@@ -46,7 +46,13 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 
 #### Au niveau de répertoire 'server'  : 
 
-1. Ajoutez l'url de base do donnée à votre environnement de variabel ( vous devez créer .env file ) :
+1. Installez les dépendances :
+
+```bash
+   npm install
+```
+
+2. Ajoutez l'url de base do donnée à votre environnement de variabel ( vous devez créer .env file ) :
    
    Ici vous devez utiliser un base de bonnée compatible avec Prisma ORM ( PostgreSQL, MySQL, MongoDB, Sqlite... ) 
    J'ai utilisé Mysql alors l'url et sous cette forme : 
@@ -55,13 +61,12 @@ Le système adopte une architecture propre avec une séparation claire entre la 
    DATABASE_URL = mysql://username:password@host:port/database
  ```
 
-2. Installez les dépendances :
+3. Démarrer la base de données :
 
-```bash
-   npm install
-```   
+Assurez-vous que votre service base de données est en cours d'exécution.
 
-3. Appliquer les migrations et créer le schéma avec :
+4. Appliquer les migrations et créer le schéma avec :
+   
 Cette commande va à la fois créer la base de données (si elle n'existe pas déjà) et appliquer les migrations pour créer les tables nécessaires.
 Une fois la migration réussie, votre base de données sera configurée avec les tables définies dans votre schéma Prisma (server/prisma/schema.prisma).
 
@@ -69,20 +74,20 @@ Une fois la migration réussie, votre base de données sera configurée avec les
    npx prisma migrate dev --name init
 ```   
 
-4. Générer le client Prisma :
+5. Générer le client Prisma :
 
 ```bash 
 npx prisma generate
 ```   
 
-5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
+6. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
 
 ```bash
    npm run seed
 ```
    Les exemples sont créé avec le fichier server/prisma/seed.ts   
 
-6. Construire et éxecuter le serveur avec :
+7. Construire et éxecuter le serveur avec :
 
 ```bash
    npm run build
