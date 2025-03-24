@@ -62,16 +62,17 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 ```   
 
 3. Appliquer les migrations et créer le schéma avec :
+Cette commande va à la fois créer la base de données (si elle n'existe pas déjà) et appliquer les migrations pour créer les tables nécessaires.
+Une fois la migration réussie, votre base de données sera configurée avec les tables définies dans votre schéma Prisma (server/prisma/schema.prisma).
 
 ```bash
-   npx prisma migrate dev --name
+   npx prisma migrate dev --name init
 ```   
-   "name" est le nom de migration 
 
 4. Générer le client Prisma :
 
-```bash
-   npx generate prisma
+```cmd
+   npx prisma generate
 ```   
 
 5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
