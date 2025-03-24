@@ -13,7 +13,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 - Express.js
 - TypeScript
 - Prisma ORM (pour la gestion de la base de données)
-- Jest
+- Jest (test unitaire)
 - Swagger (pour la documentation de l'API)
 
 ### Frontend
