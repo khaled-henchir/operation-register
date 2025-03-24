@@ -17,7 +17,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 - Swagger (pour la documentation de l'API)
 
 ### Frontend
-- React
+- React (v19)
 - TypeScript
 - CSS3
 - Vite (bundler)
@@ -37,22 +37,98 @@ Le système adopte une architecture propre avec une séparation claire entre la 
 - Node.js (version 14 ou supérieure)
 - npm 
 
-### Configuration Backend
+### Execution manuelle de client et serveur : 
 
 1. Clonez le repository sur votre machine locale :
-   ```bash
+
+```bash
    git clone https://github.com/khaled-henchir/operation-register
-   ```
+```
 
-2. Entrez dans le répertoire du projet :
-   ```bash
-   cd operation-register
-   ```
-#### Execution manuelle de client et serveur : 
+#### Au niveau de répertoire 'server'  : 
 
-1. Entrez dans le répertoire du serveur :
-   ```bash
-   cd server
-   ```
-2. Entrez dans le répertoire du serveur :
+1. Ajoutez l'url de base do donnée à votre environnement de variabel ( vous devez créer .env file ) :
+   
+
+```bash
+   #.env 
+   # Ici vous devez utiliser un base de bonnée compatible avec Prisma ORM ( PostgreSQL, MySQL, MongoDB, Sqlite... ) 
+   # J'ai utilisé Mysql alors l'url et sous cette forme : 
+   DATABASE_URL = mysql://username:password@host:port/database
+ ```
+
+2. Installez les dépendances :
+
+```bash
+   npm install
+```   
+
+3. Appliquer les migrations et créer le schéma avec :
+
+```bash
+   npx prisma migrate dev --name
+# name est le nom de migration 
+```   
+
+4. Générer le client Prisma :
+
+```bash
+   npx generate prisma
+```   
+
+5. Remplissez votre base de données avec des exemples d'entreprises et d'opérations ( Optionnelle ) :
+
+```bash
+   # Les samples sont créé avec le fichier server/prisma/seed.ts
+   npm run seed
+```   
+
+6. Construire et éxecuter le server avec :
+
+```bash
+   npm run build
+   npm run start	
+```   
+
+#### Au niveau de répertoire 'client' : 
+
+
+1. Installez les dépendances :
+
+```bash
+   npm install
+```
+
+6. Construire et éxecuter le server avec :
+
+```bash
+   npm run build
+   npm run start	
+```   
+
+#### Avec Docker : 
+
+1. Executez ce command ( vous devez avoir docker installé ) :
+
+```bash
+   docker-compose up --build
+```
+
+
+Documentation de l'API
+
+Une fois le serveur lancé, la documentation de l'API est disponible via Swagger à l'adresse suivante (adaptée selon votre configuration) :
+
+```
+http://localhost:<port>/api-docs
+```
+
+Tests
+
+Les tests unitaires et d'intégration sont réalisés avec Jest. Pour exécuter les tests dans le répertoire du serveur, utilisez la commande suivante :
+
+```
+npm run test
+```
+
 
