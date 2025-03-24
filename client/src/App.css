@@ -25,7 +25,7 @@
   line-height: 1.4;
 }
 
-/* Adjust the dashboard layout to fit in a single viewport */
+/* Dashboard layout */
 .dashboard {
   display: grid;
   grid-template-columns: 1fr;
@@ -42,13 +42,13 @@
   }
 }
 
-
+/* Form styles */
 .form-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; 
-  max-height: calc(100vh - 150px); 
+  overflow: hidden;
+  max-height: calc(100vh - 150px);
 }
 
 .form-title {
@@ -129,7 +129,19 @@
   color: var(--muted-foreground);
 }
 
-/* Adjust the operation list container to enable scrolling */
+/* Form scroll container */
+.form-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Operation list styles */
 .operation-list-container {
   display: flex;
   flex-direction: column;
@@ -166,7 +178,7 @@
   margin-bottom: 0;
 }
 
-/* Make the operation list scroll container take full available height */
+/* Operation list scroll container */
 .operation-list-scroll-container {
   flex: 1;
   overflow-y: auto;
@@ -187,7 +199,7 @@
   gap: 1.1rem;
 }
 
-/* Make operation cards more compact */
+/* Operation card styles */
 .operation-item {
   padding: 1.2rem;
   background-color: var(--background);
@@ -311,6 +323,105 @@
   background-color: var(--success);
 }
 
+/* Operation status indicators */
+.operation-status {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  z-index: 5;
+}
+
+.status-new {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+}
+
+.status-in-progress {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.status-complete {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+/* Operation progress bar */
+.operation-progress-container {
+  width: 100%;
+  height: 6px;
+  background-color: var(--muted);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.operation-progress-bar {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.operation-lots-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Refresh button */
+.refresh-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  background-color: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.refresh-button:hover {
+  background-color: var(--muted);
+  border-color: var(--primary);
+}
+
+.refresh-icon {
+  animation: none;
+  transition: transform 0.3s ease;
+}
+
+.refresh-button:hover .refresh-icon {
+  animation: spin 1s linear infinite;
+}
+
+.operation-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0rem;
+}
+
+.last-updated {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-left: auto;
+  padding: 0.6rem;
+}
+
+.operation-error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Utility components */
 .loader {
   display: flex;
   flex-direction: column;
@@ -330,7 +441,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Enhanced error component */
 .error {
   display: flex;
   align-items: center;
@@ -380,68 +490,6 @@
   font-size: 0.875rem;
 }
 
-/* Enhanced toast styles */
-.toast {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 300px;
-  max-width: 400px;
-  animation: slideIn 0.3s ease;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.toast-leaving {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
-.toast-success {
-  background-color: rgba(16, 185, 129, 0.1);
-  border: 1px solid var(--success);
-  color: var(--success);
-}
-
-.toast-error {
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error);
-  color: var(--error);
-}
-
-.toast-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.toast-icon {
-  flex-shrink: 0;
-}
-
-.toast-message {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.toast-close {
-  background: none;
-  border: none;
-  color: currentColor;
-  cursor: pointer;
-  padding: 0;
-  height: auto;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.toast-close:hover {
-  opacity: 1;
-  background: none;
-}
-
 /* Loading button styles */
 .loading-button {
   position: relative;
@@ -460,35 +508,98 @@
   animation: spin 1s linear infinite;
 }
 
-/* Offline indicator */
-.offline-indicator {
+/* Toast styles */
+.toast-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: rgba(239, 68, 68, 0.1);
-  border-radius: var(--radius);
-  color: var(--error);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-top: 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 9999; /* Ensure toasts are always on top */
+  max-width: 400px;
 }
 
-/* Make the form scroll container take full available height */
-.form-scroll-container {
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-width: 100%;
+  animation: slideIn 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.toast-leaving {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.toast-success {
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.toast-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 0.5rem;
-  margin-right: -0.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted-foreground) var(--muted);
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  -webkit-column-rule-width: 10px;
 }
-::-webkit-scrollbar {
-  width: 10px;
+
+.toast-icon {
+  flex-shrink: 0;
 }
+
+.toast-message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: currentColor;
+  cursor: pointer;
+  padding: 0.25rem;
+  height: auto;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.toast-close:hover {
+  opacity: 1;
+  background: none;
+}
+
+@media (max-width: 480px) {
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+  }
+
+  .toast {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -516,7 +627,27 @@
   }
 }
 
-/* Replace the .scrollable class with a more specific implementation */
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Ensure scrolling works properly */
 .scrollable-content {
   overflow-y: auto;
   overflow-x: hidden;

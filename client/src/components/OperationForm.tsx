@@ -3,16 +3,15 @@
  *
  * Fournit une interface de formulaire pour créer de nouvelles opérations.
  * Gère l'état du formulaire, la validation et la soumission à l'API.
- * Amélioré pour l'accessibilité avec des attributs ARIA appropriés.
  *
  * @component
  * @param {OperationFormProps} props - Props du composant, incluant le callback pour quand une opération est créée
  */
-import { type FC, useState, useContext, type ChangeEvent, type FormEvent, useRef, useEffect } from "react"
+import React, { type FC, useState, useContext, type ChangeEvent, type FormEvent, useRef, useEffect } from "react"
 import { ServiceContext } from "../context/ServiceContext"
+import { useToast } from "./ToastContainer"
 import type { OperationFormProps, OperationFormData } from "../types"
-import React from "react"
-import Error from "./Error"
+import type Error from "./Error"
 import ValidationService from "../services/ValidationService"
 import { useOperations } from "../hooks/useOperations"
 
@@ -26,7 +25,7 @@ interface FormErrors {
 }
 
 const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
-  // Initialisation de l'état du formulaire avec des valeurs vides
+  // Initialisation de l'état du formulaire
   const [formData, setFormData] = useState<OperationFormData>({
     commercialName: "",
     companyId: "",
@@ -39,6 +38,7 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const { operationService } = useContext(ServiceContext)
   const { data: existingOperations } = useOperations()
+  const { showToast } = useToast()
 
   // Référence pour le focus après soumission
   const commercialNameRef = useRef<HTMLInputElement>(null)
@@ -46,10 +46,9 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
   const [announcementMessage, setAnnouncementMessage] = useState<string>("")
 
-  // Effet pour annoncer les messages aux lecteurs d'écran
+
   useEffect(() => {
     if (announcementMessage) {
-      // Le message sera effacé après 5 secondes
       const timer = setTimeout(() => {
         setAnnouncementMessage("")
       }, 5000)
@@ -102,12 +101,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
         return ValidationService.validateCommercialName(formData.commercialName)
       case "companyId":
         return ValidationService.validateCompanyId(formData.companyId)
-      case "address":
-        return ValidationService.validateAddress(formData.address)
-      case "deliveryDate":
-        return ValidationService.validateDeliveryDate(formData.deliveryDate)
-      case "availableLots":
-        return ValidationService.validateAvailableLots(formData.availableLots)
       default:
         return undefined
     }
@@ -120,7 +113,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Mark all fields as touched
     const allTouched = Object.keys(formData).reduce(
       (acc, key) => {
         acc[key] = true
@@ -130,15 +122,13 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
     )
     setTouched(allTouched)
 
-    // Validate all fields
     const errors = validateForm()
     setFormErrors(errors)
 
-    // If there are errors, don't submit
     if (Object.keys(errors).length > 0) {
       setAnnouncementMessage("Le formulaire contient des erreurs. Veuillez les corriger avant de soumettre.")
+      showToast("Le formulaire contient des erreurs. Veuillez les corriger avant de soumettre.", "error")
 
-      // Focus sur le premier champ avec erreur
       const firstErrorField = Object.keys(errors)[0]
       const errorElement = document.getElementById(firstErrorField)
       errorElement?.focus()
@@ -150,7 +140,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
     setFormErrors({})
 
     try {
-      // Préparer l'objet opération avec des lots réservés à 0
       const operationToCreate = {
         ...formData,
         reservedLots: 0,
@@ -159,8 +148,8 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
       const createdOperation = await operationService.createOperation(operationToCreate)
       onOperationCreated(createdOperation)
 
-      // Annoncer le succès pour les lecteurs d'écran
       setAnnouncementMessage(`Opération ${formData.commercialName} créée avec succès.`)
+      showToast(`Opération ${formData.commercialName} créée avec succès.`, "success")
 
       // Réinitialiser le formulaire après une soumission réussie
       setFormData({
@@ -170,8 +159,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
         deliveryDate: "",
         availableLots: 0,
       })
-
-      // Reset touched state
       setTouched({})
 
       // Indiquer que le formulaire a été soumis avec succès pour remettre le focus
@@ -181,6 +168,8 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
 
       // Handle specific error messages from the API
       const errorMessage = (error as Error).message
+
+      // Determine if this is a field-specific error or a general error
       if (errorMessage.includes("société rattachée n'existe pas")) {
         setFormErrors({ companyId: "La société rattachée n'existe pas" })
       } else if (errorMessage.includes("même nom existe déjà")) {
@@ -188,10 +177,9 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
       } else if (errorMessage.includes("ne doit pas dépasser 24 caractères")) {
         setFormErrors({ commercialName: "Le nom d'une opération ne doit pas dépasser 24 caractères" })
       } else {
-        setFormErrors({ general: errorMessage })
+        showToast(`Erreur lors de la création de l'opération: ${errorMessage}`, "error")
       }
 
-      // Annoncer l'erreur pour les lecteurs d'écran
       setAnnouncementMessage(`Erreur lors de la création de l'opération: ${errorMessage}`)
     } finally {
       setLoading(false)
@@ -234,13 +222,14 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id } = e.target
 
-    // Mark field as touched
+
     setTouched({
       ...touched,
       [id]: true,
     })
 
-    // Validate the field
+ 
+  
     const fieldError = validateField(id)
     setFormErrors((prev) => ({
       ...prev,
@@ -261,7 +250,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
 
   return (
     <>
-      {/* Région live pour les annonces aux lecteurs d'écran */}
       <div className="sr-only" aria-live="assertive" role="status">
         {announcementMessage}
       </div>
@@ -284,8 +272,6 @@ const OperationForm: FC<OperationFormProps> = ({ onOperationCreated }) => {
         </svg>
         <h3 id="form-heading">Créer une Nouvelle Opération</h3>
       </div>
-
-      {formErrors.general && <Error message={formErrors.general} />}
 
       <div className="form-scroll-container">
         <form ref={formRef} onSubmit={handleSubmit} aria-labelledby="form-heading" noValidate>

@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Composant Conteneur de Toast
  *
@@ -5,7 +7,7 @@
  * Centralise la logique de toast pour éviter la duplication dans les composants.
  */
 import React from "react"
-import { useState, createContext, useContext } from "react"
+import { useState, createContext, useContext, useEffect } from "react"
 import Toast from "./Toast"
 
 interface ToastProps {
@@ -19,7 +21,7 @@ interface ToastContextType {
   hideToast: (id: number) => void
 }
 
-// Create context for toast management
+// Context for toast management
 export const ToastContext = createContext<ToastContextType>({
   showToast: () => {},
   hideToast: () => {},
@@ -28,8 +30,20 @@ export const ToastContext = createContext<ToastContextType>({
 // Hook to use toast functionality
 export const useToast = () => useContext(ToastContext)
 
-const ToastContainer: React.FC = () => {
+interface ToastContainerProps {
+  initialToast: { message: string; type: "success" | "error" } | null
+}
+
+const ToastContainer: React.FC<ToastContainerProps> = ({ initialToast }) => {
   const [toasts, setToasts] = useState<ToastProps[]>([])
+
+  // Effect to handle initialToast prop changes
+  useEffect(() => {
+    if (initialToast) {
+      const id = Date.now()
+      setToasts((prevToasts) => [...prevToasts, { ...initialToast, id }])
+    }
+  }, [initialToast])
 
   /**
    * Affiche un message toast
@@ -39,11 +53,6 @@ const ToastContainer: React.FC = () => {
   const showToast = (message: string, type: "success" | "error") => {
     const id = Date.now()
     setToasts((prevToasts) => [...prevToasts, { message, type, id }])
-
-    // Supprimer le toast après 5 secondes
-    setTimeout(() => {
-      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
-    }, 5000)
   }
 
   /**
@@ -55,13 +64,11 @@ const ToastContainer: React.FC = () => {
   }
 
   return (
-    <ToastContext.Provider value={{ showToast, hideToast }}>
-      <div className="toast-container">
-        {toasts.map((toast) => (
-          <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => hideToast(toast.id)} />
-        ))}
-      </div>
-    </ToastContext.Provider>
+    <div className="toast-container">
+      {toasts.map((toast) => (
+        <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => hideToast(toast.id)} />
+      ))}
+    </div>
   )
 }
 

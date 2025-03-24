@@ -22,7 +22,7 @@ export class CreateOperationUseCase {
 
         const companyExists = await this.operationRepository.companyExists(operationData.companyId);
         if (!companyExists) {
-            throw new Error('La société rattachée n’existe pas');
+            throw new Error("La société rattachée n'existe pas");
         }
 
         const nameExists = await this.operationRepository.existsByNameAndDateRange(

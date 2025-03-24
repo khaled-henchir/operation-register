@@ -2,7 +2,7 @@ services:
   backend:
     build: ./server
     ports:
-      - "3001:3001"
+      - "3000:3000"
     environment:
       - DATABASE_URL=mysql://user:userpassword@db:3306/my_database
     depends_on:
@@ -11,7 +11,7 @@ services:
   frontend:
     build: ./client  
     ports:
-      - "5000:5000"
+      - "5173:5173"
     depends_on:
       - backend
 

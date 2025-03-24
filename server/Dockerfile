@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
 
@@ -9,6 +9,7 @@ RUN npm i
 COPY prisma ./prisma
 
 RUN npx prisma generate
+RUN ls -la /app/node_modules/.prisma/client
 
 COPY . .
 
@@ -16,4 +17,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "dist/server.js"]
+CMD ["npm", "run" , "start"]

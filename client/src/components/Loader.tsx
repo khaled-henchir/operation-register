@@ -2,7 +2,6 @@
  * Composant Chargement
  *
  * Affiche un indicateur de chargement avec un spinner et un message.
- * Utilisé dans toute l'application pour indiquer les états de chargement.
  *
  * @component
  */

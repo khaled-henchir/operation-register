@@ -37,73 +37,14 @@ class ValidationService {
     return undefined
   }
 
-  /**
-   * Valide l'adresse d'une opération
-   * @param address Adresse à valider
-   * @returns Message d'erreur ou undefined si valide
-   */
-  static validateAddress(address: string): string | undefined {
-    if (!address.trim()) {
-      return "L'adresse est requise"
-    }
 
-    // Minimum length validation
-    if (address.trim().length < 5) {
-      return "L'adresse doit contenir au moins 5 caractères"
-    }
 
-    return undefined
-  }
 
-  /**
-   * Valide la date de livraison d'une opération
-   * @param deliveryDate Date de livraison à valider
-   * @returns Message d'erreur ou undefined si valide
-   */
-  static validateDeliveryDate(deliveryDate: string): string | undefined {
-    if (!deliveryDate) {
-      return "La date de livraison est requise"
-    }
 
-    const date = new Date(deliveryDate)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0) // Normaliser à minuit pour comparer uniquement les dates
-
-    if (isNaN(date.getTime())) {
-      return "Format de date invalide"
-    }
-
-    if (date < today) {
-      return "La date de livraison doit être dans le futur"
-    }
-
-    return undefined
-  }
-
-  /**
-   * Valide le nombre de lots disponibles
-   * @param availableLots Nombre de lots à valider
-   * @returns Message d'erreur ou undefined si valide
-   */
-  static validateAvailableLots(availableLots: number): string | undefined {
-    if (availableLots === undefined || availableLots === null) {
-      return "Le nombre de lots disponibles est requis"
-    }
-
-    if (availableLots <= 0) {
-      return "Le nombre de lots disponibles doit être supérieur à 0"
-    }
-
-    if (!Number.isInteger(availableLots)) {
-      return "Le nombre de lots doit être un nombre entier"
-    }
-
-    return undefined
-  }
 
   /**
    * Vérifie si un nom commercial est unique dans la période de 10 ans
-   * Cette fonction est une simulation côté client et devrait être utilisée
+   * Cette fonction est une simulation côté client et elle est utilisée
    * en complément de la validation côté serveur
    *
    * @param name Nom commercial à vérifier
@@ -156,9 +97,6 @@ class ValidationService {
     const errors: Record<string, string | undefined> = {
       commercialName: this.validateCommercialName(data.commercialName),
       companyId: this.validateCompanyId(data.companyId),
-      address: this.validateAddress(data.address),
-      deliveryDate: this.validateDeliveryDate(data.deliveryDate),
-      availableLots: this.validateAvailableLots(data.availableLots),
     }
 
     // Add uniqueness validation if we have existing operations

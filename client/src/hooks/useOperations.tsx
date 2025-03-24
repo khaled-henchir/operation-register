@@ -2,7 +2,7 @@
  * Hook useOperations
  *
  * Hook React personnalisé pour gérer les données des opérations.
- * Gère la récupération, l'état et les opérations CRUD pour les opérations.
+ * Gère la récupération, l'état et les opérations écrire et lire (pour ce version) pour les opérations.
  *
  * @hook
  * @returns {Object} Objet contenant les données des opérations, l'état de chargement, l'état d'erreur et les fonctions CRUD
@@ -59,6 +59,9 @@ export function useOperations() {
 
       setData(formattedMockOperations)
       setError("Impossible de charger les données depuis l'API. Affichage des données de démonstration.")
+
+      // We don't show a toast here because the error will be displayed in the UI
+      // by the OperationContainer component
     } finally {
       setLoading(false)
     }
@@ -94,7 +97,7 @@ export function useOperations() {
       return createdOperation
     } catch (error) {
       console.error("Erreur lors de la création de l'opération:", error)
-      throw error
+      throw error // Re-throw to allow the calling component to handle it
     }
   }
 

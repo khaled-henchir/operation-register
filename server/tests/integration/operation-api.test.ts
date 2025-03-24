@@ -4,14 +4,12 @@ import { PrismaClient } from "@prisma/client"
 import { CompanyFactory } from "../../src/domain/factories/company-factory"
 import { describe, beforeAll, afterAll, it, expect } from "@jest/globals"
 
-// Cette suite de tests nécessite une base de données de test
-// Nous utilisons une base de données en mémoire ou une base de test dédiée
+
 describe("Operation API Integration Tests", () => {
   let app: ReturnType<typeof createServer>
   let prisma: PrismaClient
 
   beforeAll(async () => {
-    // Initialiser l'application et la connexion à la base de données
     app = createServer()
     prisma = new PrismaClient()
 

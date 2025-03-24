@@ -1,7 +1,7 @@
 /**
  * Operation Container Component
  *
- * Acts as a container for the operations list, handling the data fetching logic
+ * Acts as a container for the operations list, handling the data fetching logic (using the custom hook useOperations)
  * and displaying appropriate loading or error states.
  *
  * @component

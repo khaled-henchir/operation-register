@@ -1,5 +1,5 @@
-import { OperationRepository } from '../../../src/domain/repositories/operation-repository';
-import { Operation } from '../../../src/domain/entities/operations';
+import { OperationRepository } from '../../../../src/domain/repositories/operation-repository';
+import { Operation } from '../../../../src/domain/entities/operations';
 
 // Create a mock implementation of the interface for testing
 class MockOperationRepository implements OperationRepository {

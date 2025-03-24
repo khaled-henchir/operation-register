@@ -2,9 +2,8 @@
   "name": "gestion-des-operations-immobiliere",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run start:server && start npm run start:client",
-    "start:server": "cd server && npm run dev",
-    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && npm run build && npm run start",
+    "start:client": "cd client && npm run build && npm run start",
 	"install:all": "npm install --prefix server && npm install --prefix client",
 	"prisma:generate": "cd server && npx prisma generate",
 	"seed": "cd server && npm run seed"

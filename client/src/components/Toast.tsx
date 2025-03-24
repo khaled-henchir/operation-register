@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { type FC, useEffect, useState } from "react"
 
@@ -22,7 +23,6 @@ const Toast: FC<ToastProps> = ({ message, type, onClose }) => {
 
   const handleClose = () => {
     setIsLeaving(true)
-    // Wait for animation to complete before removing from DOM
     setTimeout(() => {
       setIsVisible(false)
       onClose()
@@ -35,7 +35,12 @@ const Toast: FC<ToastProps> = ({ message, type, onClose }) => {
   const iconName = type === "success" ? "check-circle" : "alert-circle"
 
   return (
-    <div className={toastClass} role="alert" aria-live={type === "error" ? "assertive" : "polite"}>
+    <div
+      className={toastClass}
+      role="alert"
+      aria-live={type === "error" ? "assertive" : "polite"}
+      data-testid={`toast-${type}`}
+    >
       <div className="toast-content">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +71,12 @@ const Toast: FC<ToastProps> = ({ message, type, onClose }) => {
         </svg>
         <span className="toast-message">{message}</span>
       </div>
-      <button className="toast-close" onClick={handleClose} aria-label="Fermer la notification">
+      <button
+        className="toast-close"
+        onClick={handleClose}
+        aria-label="Fermer la notification"
+        data-testid="toast-close-button"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"

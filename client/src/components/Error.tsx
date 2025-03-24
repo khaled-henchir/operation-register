@@ -2,7 +2,6 @@
  * Composant Erreur
  *
  * Affiche un message d'erreur à l'utilisateur avec une icône d'avertissement.
- * Utilisé dans toute l'application pour afficher les états d'erreur de manière cohérente.
  *
  * @component
  * @param {ErrorProps} props - Props du composant contenant le message d'erreur

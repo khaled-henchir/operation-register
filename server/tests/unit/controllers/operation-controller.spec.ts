@@ -1,123 +1,154 @@
-import type { Request, Response } from "express"
-import { OperationController } from "../../../src/infrastructure/http/controllers/operation-controller"
-import type { CreateOperationUseCase } from "../../../src/application/use-cases/create-operation"
-import type { GetAllOperationsUseCase } from "../../../src/application/use-cases/get-all-operations"
-import { Operation } from "../../../src/domain/entities/operations"
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
+import type { Request, Response } from 'express';
+import { OperationController } from '../../../src/infrastructure/http/controllers/operation-controller';
+import { CreateOperationUseCase } from '../../../src/application/use-cases/create-operation';
+import { GetAllOperationsUseCase } from '../../../src/application/use-cases/get-all-operations';
 
-describe("OperationController", () => {
-  let operationController: OperationController
-  let mockCreateOperationUseCase: jest.Mocked<CreateOperationUseCase>
-  let mockGetAllOperationsUseCase: jest.Mocked<GetAllOperationsUseCase>
-  let mockRequest: Partial<Request>
-  let mockResponse: Partial<Response>
-  let jsonSpy: jest.Mock
-  let statusSpy: jest.Mock
+// Mock implementations
+jest.mock('../../../src/application/use-cases/create-operation');
+jest.mock('../../../src/application/use-cases/get-all-operations');
+
+describe('OperationController', () => {
+  let operationController: OperationController;
+  let mockCreateOperationUseCase: jest.Mocked<CreateOperationUseCase>;
+  let mockGetAllOperationsUseCase: jest.Mocked<GetAllOperationsUseCase>;
+  let mockRequest: Partial<Request>;
+  let mockResponse: Partial<Response>;
+  let jsonMock: jest.Mock;
+  let statusMock: jest.Mock;
 
   beforeEach(() => {
-    // Create mock use cases
-    mockCreateOperationUseCase = { execute: jest.fn() } as unknown as jest.Mocked<CreateOperationUseCase>
-    mockGetAllOperationsUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetAllOperationsUseCase>
+    // Reset mocks
+    mockCreateOperationUseCase = {
+      execute: jest.fn(),
+    } as unknown as jest.Mocked<CreateOperationUseCase>;
 
-    // Create controller with mock use cases
-    operationController = new OperationController(mockCreateOperationUseCase, mockGetAllOperationsUseCase)
+    mockGetAllOperationsUseCase = {
+      execute: jest.fn(),
+    } as unknown as jest.Mocked<GetAllOperationsUseCase>;
 
-    // Set up mock request and response
-    jsonSpy = jest.fn().mockReturnValue({})
-    statusSpy = jest.fn().mockReturnThis()
+    // Create controller with mocked dependencies
+    operationController = new OperationController(
+      mockCreateOperationUseCase,
+      mockGetAllOperationsUseCase
+    );
 
-    mockRequest = {}
+    // Set up request and response mocks
+    jsonMock = jest.fn().mockReturnThis();
+    statusMock = jest.fn().mockReturnValue({ json: jsonMock });
+    
+    mockRequest = {};
     mockResponse = {
-      json: jsonSpy,
-      status: statusSpy,
-    }
-  })
+      status: statusMock,
+      json: jsonMock,
+    };
+  });
 
-  describe("create", () => {
-    const validRequestBody = {
-      commercialName: "Test Operation",
-      companyId: "company-123",
-      deliveryDate: "2025-05-15",
-      address: "123 Test St",
-      availableLots: "10", // Passed as string, will be converted
-    }
-
-    it("should create an operation successfully", async () => {
+  describe('create', () => {
+    it('should create a new operation and return status 201', async () => {
       // Arrange
-      mockRequest.body = validRequestBody
-      mockCreateOperationUseCase.execute.mockResolvedValue("Nouvelle opération enregistrée")
+      const mockRequestBody = {
+        commercialName: 'Test Operation',
+        companyId: 'company-123',
+        deliveryDate: '2025-04-01T00:00:00.000Z',
+        address: '123 Test Street',
+        availableLots: '10',
+      };
+
+      const expectedArgs = {
+        commercialName: 'Test Operation',
+        companyId: 'company-123',
+        deliveryDate: new Date('2025-04-01T00:00:00.000Z'),
+        address: '123 Test Street',
+        availableLots: 10,
+      };
+
+      mockRequest.body = mockRequestBody;
+      mockCreateOperationUseCase.execute.mockResolvedValue('Operation created successfully');
 
       // Act
-      await operationController.create(mockRequest as Request, mockResponse as Response)
+      await operationController.create(mockRequest as Request, mockResponse as Response);
 
       // Assert
-      expect(mockCreateOperationUseCase.execute).toHaveBeenCalledWith({
-        commercialName: "Test Operation",
-        companyId: "company-123",
-        deliveryDate: expect.any(Date),
-        address: "123 Test St",
-        availableLots: 10, // Ensure the conversion from string to number
-      })
-      expect(statusSpy).toHaveBeenCalledWith(201)
-      expect(jsonSpy).toHaveBeenCalledWith({ message: "Nouvelle opération enregistrée" })
-    })
+      expect(mockCreateOperationUseCase.execute).toHaveBeenCalledWith(expectedArgs);
+      expect(statusMock).toHaveBeenCalledWith(201);
+      expect(jsonMock).toHaveBeenCalledWith({ message: 'Operation created successfully' });
+    });
 
-    it("should handle errors and return 400 status", async () => {
+    it('should handle errors and return status 400', async () => {
       // Arrange
-      mockRequest.body = validRequestBody
-      const error = new Error("Validation error")
-      mockCreateOperationUseCase.execute.mockRejectedValue(error)
+      mockRequest.body = {
+        // Invalid or missing data
+      };
+      const errorMessage = 'Required fields are missing';
+      mockCreateOperationUseCase.execute.mockRejectedValue(new Error(errorMessage));
 
       // Act
-      await operationController.create(mockRequest as Request, mockResponse as Response)
+      await operationController.create(mockRequest as Request, mockResponse as Response);
 
       // Assert
-      expect(statusSpy).toHaveBeenCalledWith(400)
-      expect(jsonSpy).toHaveBeenCalledWith({ error: "Validation error" })
-    })
-  })
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({ error: errorMessage });
+    });
+  });
 
-  describe("getAll", () => {
-    const sampleOperations = [
-      new Operation("op-1", "Operation 1", "company-1", new Date("2025-04-15"), "123 Main St", 5, 2),
-      new Operation("op-2", "Operation 2", "company-2", new Date("2025-05-20"), "456 Second Ave", 10, 0),
-    ]
-
-    it("should return all operations with 200 status", async () => {
+  describe('getAll', () => {
+    it('should return all operations with status 200 when operations exist', async () => {
       // Arrange
-      mockGetAllOperationsUseCase.execute.mockResolvedValue(sampleOperations)
+      const mockOperations = [
+        {
+          id: 'op-1',
+          commercialName: 'Operation 1',
+          companyId: 'company-123',
+          deliveryDate: new Date('2025-04-01'),
+          address: '123 Test Street',
+          totalLots: 10,
+        },
+        {
+          id: 'op-2',
+          commercialName: 'Operation 2',
+          companyId: 'company-456',
+          deliveryDate: new Date('2025-04-15'),
+          address: '456 Test Avenue',
+          totalLots: 5,
+        },
+      ];
+
+      mockGetAllOperationsUseCase.execute.mockResolvedValue(mockOperations);
 
       // Act
-      await operationController.getAll(mockRequest as Request, mockResponse as Response)
+      await operationController.getAll(mockRequest as Request, mockResponse as Response);
 
       // Assert
-      expect(mockGetAllOperationsUseCase.execute).toHaveBeenCalled()
-      expect(statusSpy).toHaveBeenCalledWith(200)
-      expect(jsonSpy).toHaveBeenCalledWith({ data: sampleOperations }) // ✅ Corrected response format
-    })
+      expect(mockGetAllOperationsUseCase.execute).toHaveBeenCalled();
+      expect(statusMock).toHaveBeenCalledWith(200);
+      expect(jsonMock).toHaveBeenCalledWith({ data: mockOperations });
+    });
 
-    it("should return empty array with 200 status when no operations are found", async () => {
+    it('should return empty array with status 200 when no operations exist', async () => {
       // Arrange
-      mockGetAllOperationsUseCase.execute.mockResolvedValue([])
+      mockGetAllOperationsUseCase.execute.mockResolvedValue([]);
 
       // Act
-      await operationController.getAll(mockRequest as Request, mockResponse as Response)
+      await operationController.getAll(mockRequest as Request, mockResponse as Response);
 
       // Assert
-      expect(statusSpy).toHaveBeenCalledWith(200)
-      expect(jsonSpy).toHaveBeenCalledWith({ data: [] }) // ✅ Matches the controller's response
-    })
+      expect(mockGetAllOperationsUseCase.execute).toHaveBeenCalled();
+      expect(statusMock).toHaveBeenCalledWith(200);
+      expect(jsonMock).toHaveBeenCalledWith({ data: [], count: 0 });
+    });
 
-    it("should handle errors and return 400 status", async () => {
+    it('should handle errors and return status 400', async () => {
       // Arrange
-      const error = new Error("Database error")
-      mockGetAllOperationsUseCase.execute.mockRejectedValue(error)
+      const errorMessage = 'Database connection error';
+      mockGetAllOperationsUseCase.execute.mockRejectedValue(new Error(errorMessage));
 
       // Act
-      await operationController.getAll(mockRequest as Request, mockResponse as Response)
+      await operationController.getAll(mockRequest as Request, mockResponse as Response);
 
       // Assert
-      expect(statusSpy).toHaveBeenCalledWith(400)
-      expect(jsonSpy).toHaveBeenCalledWith({ error: "Database error" })
-    })
-  })
-})
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({ error: errorMessage });
+    });
+  });
+});

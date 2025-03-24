@@ -7,25 +7,17 @@
  *
  * @component
  */
-import { useState, useEffect } from "react"
+import { useState, React } from "react"
 import OperationContainer from "./components/OperationContainer"
 import { useOperations } from "./hooks/useOperations"
 import OperationForm from "./components/OperationForm"
-import ToastContainer from "./components/ToastContainer"
+import ToastContainer, { ToastContext }  from "./components/ToastContainer"
 import "./App.css"
 import type { Operation } from "./types"
-import React from "react"
 
 function App() {
   const { createOperation, fetchOperations } = useOperations()
-  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true)
-
-  // Set initial load flag
-  useEffect(() => {
-    if (isInitialLoad) {
-      setIsInitialLoad(false)
-    }
-  }, [isInitialLoad])
+  const [toastMessage, setToastMessage] = useState<{ message: string; type: "success" | "error" } | null>(null)
 
   /**
    * Gère la création d'une nouvelle opération
@@ -35,36 +27,50 @@ function App() {
     createOperation(newOperation)
       .then(() => {
         fetchOperations()
+        setToastMessage({
+          message: `Opération "${newOperation.commercialName}" créée avec succès`,
+          type: "success",
+        })
       })
       .catch((err: Error) => {
         console.error("Error creating operation:", err)
+        setToastMessage({
+          message: `Erreur: ${err.message}`,
+          type: "error",
+        })
       })
   }
 
   return (
-    <div className="container full-height">
-      <header className="app-header">
-        <h1 className="app-title">Mes Opérations</h1>
-        <p className="app-description">
-          Gérez et suivez toutes vos opérations immobilières en un seul endroit. Créez de nouvelles opérations,
-          consultez les opérations existantes et suivez leur état.
-        </p>
-      </header>
+    <ToastContext.Provider
+      value={{
+        showToast: (message, type) => setToastMessage({ message, type }),
+        hideToast: () => {},
+      }}
+    >
+      <div className="container full-height">
+        <header className="app-header">
+          <h1 className="app-title">Mes Opérations</h1>
+          <p className="app-description">
+            Gérez et suivez toutes vos opérations immobilières en un seul endroit. Créez de nouvelles opérations,
+            consultez les opérations existantes et suivez leur état.
+          </p>
+        </header>
 
-      <div className="dashboard">
-        <div className="form-container card">
-          <OperationForm onOperationCreated={handleOperationCreated} />
+        <div className="dashboard">
+          <div className="form-container card">
+            <OperationForm onOperationCreated={handleOperationCreated} />
+          </div>
+
+          <div className="operation-list-container">
+            <OperationContainer />
+          </div>
         </div>
 
-        <div className="operation-list-container">
-          <OperationContainer />
-        </div>
+        <ToastContainer initialToast={toastMessage} />
       </div>
-
-      <ToastContainer />
-    </div>
+    </ToastContext.Provider>
   )
 }
 
 export default App
-
