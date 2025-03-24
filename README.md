@@ -100,7 +100,7 @@ Le système adopte une architecture propre avec une séparation claire entre la 
    npm install
 ```
 
-6. Construire et éxecuter le server avec :
+6. Construire et éxecuter le client avec :
 
 ```bash
    npm run build
