@@ -83,4 +83,5 @@ tmp/
 .svn/
 
 .gitkeep.txt
+migrations/
 

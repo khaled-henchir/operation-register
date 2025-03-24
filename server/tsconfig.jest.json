@@ -3,7 +3,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "types": ["jest", "node"],
-    "outDir": "./dist-test",  // Separate output for tests
+    "outDir": "./dist-test", 
     "noEmit": false
   },
   "include": [

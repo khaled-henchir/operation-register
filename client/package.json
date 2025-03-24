@@ -10,13 +10,8 @@
     "start": "vite preview"
   },
   "dependencies": {
-    "@jest/globals": "^29.7.0",
-    "gestion-des-operations-immobiliere": "file:..",
-    "idb": "^8.0.2",
-    "prop-types": "^15.8.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-hook-form": "^7.54.2"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
